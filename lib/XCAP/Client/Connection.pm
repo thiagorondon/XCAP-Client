@@ -11,6 +11,11 @@ has ['uri', 'auth_realm', 'auth_username','auth_password', 'content'] => (
     isa => 'Str'
 );
 
+has 'doc_content' => (
+    is => 'rw',
+    isa => 'Str'
+);
+
 has 'useragent' => ( 
     is => 'rw', 
     isa => 'Object',
@@ -34,14 +39,24 @@ sub _request () {
 
     $self->useragent->credentials($self->netloc, $self->auth_realm,
                    $self->auth_username, $self->auth_password);
+
+    my $request = new HTTP::Request($method => $self->uri);
     
-    $self->useragent->request
-        (HTTP::Request->new($method => $self->uri))->content;
+    if ($method eq 'PUT') {
+        $request->header('content-length' => length($self->doc_content));
+        $request->content($self->doc_content);
+    }
+    
+    $self->useragent->request($request)->content;
 }
+
+
 
 sub get { $_[0]->_request('GET'); }   
 
 sub delete { $_[0]->_request('DELETE'); }
+
+sub put { $_[0]->_request('PUT') }
 
 1;
 

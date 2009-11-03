@@ -3,6 +3,7 @@
 package XCAP::Client;
 
 use Moose;
+use Moose::Util::TypeConstraints;
 
 use XCAP::Client::Connection;
 
@@ -27,15 +28,28 @@ has 'uri' => (
     lazy => 1, 
     default => sub { 
         my $self = shift;
-        join ('/', $self->xcap_root, $self->doc_type, $self->doc_path, 
-            $self->user, $self->doc_name);
+        join ('/', $self->xcap_root, $self->application, $self->tree, 
+            $self->user, $self->filename);
     },
 );
 
-# TODO -> XCAP::Client::Document && XCAP::Client::Packager
-has 'doc_type' => (is => 'ro', isa => 'Str', default => 'pres-rules');
-has 'doc_path' => (is => 'ro', isa => 'Str', default => 'users');
-has 'doc_name' => (is => 'ro', isa => 'Str', default => 'index');
+has 'application' => (
+    is => 'rw', 
+    isa => enum([qw[resource-lists rls-services pres-rules pdif-manipulation watchers xcap-caps ]]), 
+    default => 'pres-rules'
+);
+
+has 'tree' => (
+    is => 'ro', 
+    isa => enum([qw[users global]]),
+    default => 'users'
+);
+
+has 'filename' => (
+    is => 'rw', 
+    isa => 'Str', 
+    default => 'index'
+);
 
 has 'connection' => (
     is => 'ro', 
@@ -52,10 +66,13 @@ has 'connection' => (
     }
 );
 
+# METHODS
 
 sub delete () { $_[0]->connection->delete; }
 
 sub get () { $_[0]->connection->get; }
+
+sub put () { $_[0]->connection->put; }
 
 =head1 NAME
 
