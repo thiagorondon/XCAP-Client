@@ -37,18 +37,25 @@ has 'doc_type' => (is => 'ro', isa => 'Str', default => 'pres-rules');
 has 'doc_path' => (is => 'ro', isa => 'Str', default => 'users');
 has 'doc_name' => (is => 'ro', isa => 'Str', default => 'index');
 
+has 'connection' => (
+    is => 'ro', 
+    isa => 'Object',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        XCAP::Client::Connection->new(
+            uri => $self->uri,
+            auth_realm => $self->auth_realm,
+            auth_username => $self->auth_username,
+            auth_password => $self->auth_password
+        )
+    }
+);
 
-sub get () {
-    my $self = shift;
-    my $connection = XCAP::Client::Connection->new(
-        uri => $self->uri,
-        auth_realm => $self->auth_realm,
-        auth_username => $self->auth_username,
-        auth_password => $self->auth_password,
-    );
 
-    $connection->get;
-}
+sub delete () { $_[0]->connection->delete; }
+
+sub get () { $_[0]->connection->get; }
 
 =head1 NAME
 
