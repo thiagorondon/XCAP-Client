@@ -4,10 +4,51 @@ package XCAP::Client;
 
 use Moose;
 
-#use XCAP::Client::Client;
-#use XCAP::Client::Application;
-#use XCAP::Client::Document;
-#use XCAP::Client::Errors;
+use XCAP::Client::Connection;
+
+has ['xcap_root', 'user'] => (
+    is => 'rw',
+    isa => 'Str'
+);
+
+has ['auth_realm', 'auth_username', 'auth_password'] => ( 
+    is => 'rw', 
+    isa => 'Str'
+);
+
+has 'ssl_verify_cert' => ( 
+    is => 'rw', 
+    isa => 'Bool'
+);
+
+has 'uri' => (
+    is => 'rw', 
+    isa => 'Str', 
+    lazy => 1, 
+    default => sub { 
+        my $self = shift;
+        join ('/', $self->xcap_root, $self->doc_type, $self->doc_path, 
+            $self->user, $self->doc_name);
+    },
+);
+
+# TODO -> XCAP::Client::Document && XCAP::Client::Packager
+has 'doc_type' => (is => 'ro', isa => 'Str', default => 'pres-rules');
+has 'doc_path' => (is => 'ro', isa => 'Str', default => 'users');
+has 'doc_name' => (is => 'ro', isa => 'Str', default => 'index');
+
+
+sub get () {
+    my $self = shift;
+    my $connection = XCAP::Client::Connection->new(
+        uri => $self->uri,
+        auth_realm => $self->auth_realm,
+        auth_username => $self->auth_username,
+        auth_password => $self->auth_password,
+    );
+
+    $connection->get;
+}
 
 =head1 NAME
 
@@ -45,41 +86,27 @@ XCAPClient library implements the XCAP protocol in client side, allowing the app
 
 xcap_root - 
 
-=cut
-
-has 'xcap_root' => ( is => 'rw', isa => 'Str');
-
 =head2 user 
 
 user -
 
-=cut
+=head2 auth_username
 
-has 'user' => ( is => 'rw', isa => 'Str');
+auth_realm -
+
 
 =head2 auth_username
 
 auth_username -
 
-=cut
-
-has 'auth_username' => ( is => 'rw', isa => 'Str');
-
 =head2 auth_password
 
 auth_password - 
 
-=cut
-
-has 'auth_password' => ( is => 'rw', isa => 'Str');
 
 =head2 ssl_verify_cert
 
 ssl_verify_cert - 
-
-=cut
-
-has 'ssl_verify_cert' => ( is => 'rw', isa => 'Bool');
 
 
 =head1 AUTHOR
@@ -93,4 +120,6 @@ This software is copyright (c) 2009 by Aware.
 This is free software; you can redistribute it and/or modify it under the same terms as the Perl 5 programming language system itself.
 
 =cut
+
+1;
 
