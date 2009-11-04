@@ -9,6 +9,7 @@ use Data::Validate::URI qw(is_uri);
 
 use XCAP::Client::Connection;
 use XCAP::Client::Document;
+use XCAP::Client::Element;
 
 our $VERSION = "0.03";
 
@@ -93,6 +94,7 @@ The module implements the following features:
  * Manage of multiple documents per XCAP application.
  * SSL support.
  * Exception for each HTTP error response.
+ * Digest and Basic HTTP authentication.
 
 Todo:
 
@@ -139,16 +141,15 @@ has 'user' => (
 
 =head2 auth_realm
 
-auth_realm -
-
+auth_realm - The HTTP authentication realm or name.
 
 =head2 auth_username
 
-auth_username -
+auth_username - The HTTP authentication username.
 
 =head2 auth_password
 
-auth_password - 
+auth_password - The HTTP authentcation password.
 
 =cut
 
@@ -197,6 +198,8 @@ has 'filename' => (
 
 =head2 connection->[create,fetch,replace,delete]
 
+You can create, fetch, replace or delete a document with this methods. To use create or delete you need to say the content of the "document->content".
+
 =cut
 
 has 'document' => (
@@ -208,6 +211,18 @@ has 'document' => (
         XCAP::Client::Document->new(connection => $self->connection) }
 );
 
+=head2 element->[add,fetch]
+
+=cut
+
+has 'element' => (
+    isa => 'ro',
+    isa => 'Object',
+    lazy => 1,
+    default => sub { 
+        my $self = shift;
+        XCAP::Client::Element->new(connection => $self->connection) }
+);
 
 =head1 AUTHOR
 
