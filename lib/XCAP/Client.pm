@@ -52,12 +52,26 @@ version 0.01
 		user => "sip:foo@domain.org",
 		auth_username => "foo",
 		auth_password => "bar",
-		ssl_verify_cert => 1,
 	);
 
-	$xcap_client->put(%xcap_doc); 
+    # Set the document.
+    $xcap_client->application('pres-rules');
+    $xcap_client->filename('index');
+    $xcap_client->tree('user');
+    $xcap_client->connection->doc_content($xml_content);
+	
+    # Create a new document.
+    $xcap_client->create; 
 
-	$xcap_client->fetch("pres-rules");
+    # Fetch pres-rules document.
+	$xcap_client->fetch();
+
+    # Replace.
+    $xcap_client->replace;
+
+    # Delete
+    $xcap_client->delete;
+
 
 =head1 DESCRIPTION
 
@@ -71,12 +85,12 @@ The module implements the following features:
  * Parameters allowing customized fields for each XCAP application.
  * Manage of multiple documents per XCAP application.
  * SSL support.
+ * Exception for each HTTP error response.
 
 Todo:
 
  * Fetch, create/replace and delete a document element (XML node)
  * Fetch, create/replace and delete an element attribute. 
- * Exception for each HTTP error response.
  * Fetch the XCAP server auids, extensions and namespaces.
 
 =head1 ATTRIBUTES
@@ -176,7 +190,7 @@ has 'filename' => (
 
 =head2 fetch
 
-=head2 put
+=head2 create
 
 =head2 delete
 
@@ -188,7 +202,7 @@ sub delete () { $_[0]->connection->delete; }
 
 sub fetch () { $_[0]->connection->fetch; }
 
-sub put () { $_[0]->connection->put; }
+sub create () { $_[0]->connection->create; }
 
 sub replace () { $_[0]->connection->replace; }
 
