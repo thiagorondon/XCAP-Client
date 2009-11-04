@@ -12,7 +12,7 @@ BEGIN {
 }
 
 our $xcap_root = 'http://localhost/xcap-root';
-our $user = 'username';
+our $user = 'sip:username@example.org';
 our $auth_username = 'auth_username';
 our $auth_password = 'auth_password';
 

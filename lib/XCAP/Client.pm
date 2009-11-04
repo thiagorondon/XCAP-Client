@@ -9,6 +9,8 @@ use Data::Validate::URI qw(is_uri);
 
 use XCAP::Client::Connection;
 
+our $VERSION = "0.01";
+
 has 'connection' => (
     is => 'ro', 
     isa => 'Object',
