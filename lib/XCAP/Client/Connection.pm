@@ -51,7 +51,7 @@ sub _request () {
                    $self->auth_username, $self->auth_password);
 
     my $request = new HTTP::Request($method => $self->uri);
-    
+   
     if ($method eq 'PUT') {
         $request->header('content-length' => length($self->doc_content));
         $request->content($self->doc_content);

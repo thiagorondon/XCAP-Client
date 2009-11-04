@@ -3,14 +3,30 @@ package XCAP::Client::Document;
 
 use Moose;
 
-has app => (is => 'rw', isa => 'Str', default => 'pres-rules');
-has xmlns => (is => 'rw', isa => 'Str', default => 'urn:ietf:params:xml:ns:pres-rules');
-has mime_type => (is => 'rw', isa => 'Str', default => 'application/auth-policy+xml');
+has connection => (
+    is => 'rw',
+    isa => 'Object',
+    required => 1,
+);
 
-#defaul is Client->username
-has scope => (is => 'rw', isa => 'Str');
+has content => (
+    is => 'rw',
+    isa => 'Str',
+);
 
-has document_name => (is => 'rw', isa => 'Str', default => 'index');
+sub fetch { $_[0]->connection->fetch; }
+
+sub delete { $_[0]->connection->delete; }
+
+sub create { 
+    my $self = shift;
+    $self->connection->fetch($self->content); 
+}
+
+sub replace { 
+    my $self = shift;
+    $self->connection->fetch($self->content); 
+}
 
 
 1;

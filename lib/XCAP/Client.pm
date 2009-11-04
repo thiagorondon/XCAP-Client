@@ -8,8 +8,9 @@ use Moose::Util::TypeConstraints;
 use Data::Validate::URI qw(is_uri);
 
 use XCAP::Client::Connection;
+use XCAP::Client::Document;
 
-our $VERSION = "0.02";
+our $VERSION = "0.03";
 
 has 'connection' => (
     is => 'ro', 
@@ -43,7 +44,9 @@ XCAP::Client - XCAP client protocol (RFC 4825).
 
 =head1 VERSION
 
-version 0.01
+Version $VERSION
+
+Development source in http://www.github.com/maluco/XCAP-Client/
 
 =head1 SYNOPSIS
 
@@ -60,19 +63,21 @@ version 0.01
     $xcap_client->application('pres-rules');
     $xcap_client->filename('index');
     $xcap_client->tree('user');
-    $xcap_client->connection->doc_content($xml_content);
-	
-    # Create a new document.
-    $xcap_client->create; 
-
-    # Fetch pres-rules document.
-	$xcap_client->fetch();
-
-    # Replace.
-    $xcap_client->replace;
 
     # Delete
-    $xcap_client->delete;
+    $xcap_client->document->delete;
+
+    # Fetch pres-rules document.
+	$xcap_client->document->fetch();
+
+    # If you want to create or replace.
+    $xcap_client->document->content($xml_content);
+	
+    # Create a new document.
+    $xcap_client->document->create; 
+
+    # Replace.
+    $xcap_client->document->replace;
 
 
 =head1 DESCRIPTION
@@ -190,28 +195,25 @@ has 'filename' => (
 
 =head1 METHODS
 
-=head2 fetch
-
-=head2 create
-
-=head2 delete
-
-=head2 replace
+=head2 connection->[create,fetch,replace,delete]
 
 =cut
 
-sub delete () { $_[0]->connection->delete; }
-
-sub fetch () { $_[0]->connection->fetch; }
-
-sub create () { $_[0]->connection->create; }
-
-sub replace () { $_[0]->connection->replace; }
+has 'document' => (
+    is => 'ro',
+    isa => 'Object',
+    lazy => 1,
+    default => sub { 
+        my $self = shift;
+        XCAP::Client::Document->new(connection => $self->connection) }
+);
 
 
 =head1 AUTHOR
 
 Thiago Rondon <thiago@aware.com.br>
+
+http://www.aware.com.br/
 
 =head1 COPYRIGHT AND LICENSE
 
