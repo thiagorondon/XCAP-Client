@@ -74,6 +74,8 @@ sub get () { $_[0]->connection->get; }
 
 sub put () { $_[0]->connection->put; }
 
+sub replace () { $_[0]->connection->replace; }
+
 =head1 NAME
 
 XCAP::Client - XCAP client protocol (RFC 4825).
@@ -103,6 +105,12 @@ version 0.01
 XCAP (RFC 4825) is a protocol on top of HTTP which allows a client to manipulate the contents of Presence Information Data Format (PIDF) based presence documents. These documents are stored in a server in XML format and are fetched, modified, replaced or deleted by the client. The protocol allows multiple clients to manipulate the data, provided that they are authorized to do so. XCAP is already used in SIMPLE-based presence systems for manipulation of presence lists and presence authorization policies.
 
 XCAPClient library implements the XCAP protocol in client side, allowing the applications to get, store, modify and delete XML documents in the server. 
+
+The module implements the following features:
+
+ * Get, create/replace and delete a document.
+ * Parameters allowing customized fields for each XCAP application.
+ * Manage of multiple documents per XCAP application.
 
 =head1 ATTRIBUTES
 

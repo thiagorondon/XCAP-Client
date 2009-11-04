@@ -58,5 +58,7 @@ sub delete { $_[0]->_request('DELETE'); }
 
 sub put { $_[0]->_request('PUT') }
 
+sub replace { $self->delete; $self->put; }
+
 1;
 
