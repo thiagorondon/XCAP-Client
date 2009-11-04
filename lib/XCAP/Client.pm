@@ -5,46 +5,9 @@ package XCAP::Client;
 use Moose;
 use Moose::Util::TypeConstraints;
 
+use Data::Validate::URI qw(is_uri);
+
 use XCAP::Client::Connection;
-
-has ['xcap_root', 'user'] => (
-    is => 'rw',
-    isa => 'Str'
-);
-
-has ['auth_realm', 'auth_username', 'auth_password'] => ( 
-    is => 'rw', 
-    isa => 'Str'
-);
-
-has 'uri' => (
-    is => 'rw', 
-    isa => 'Str', 
-    lazy => 1, 
-    default => sub { 
-        my $self = shift;
-        join ('/', $self->xcap_root, $self->application, $self->tree, 
-            $self->user, $self->filename);
-    },
-);
-
-has 'application' => (
-    is => 'rw', 
-    isa => enum([qw[resource-lists rls-services pres-rules pdif-manipulation watchers xcap-caps ]]), 
-    default => 'pres-rules'
-);
-
-has 'tree' => (
-    is => 'ro', 
-    isa => enum([qw[users global]]),
-    default => 'users'
-);
-
-has 'filename' => (
-    is => 'rw', 
-    isa => 'Str', 
-    default => 'index'
-);
 
 has 'connection' => (
     is => 'ro', 
@@ -61,15 +24,16 @@ has 'connection' => (
     }
 );
 
-# METHODS
-
-sub delete () { $_[0]->connection->delete; }
-
-sub fetch () { $_[0]->connection->fetch; }
-
-sub put () { $_[0]->connection->put; }
-
-sub replace () { $_[0]->connection->replace; }
+has 'uri' => (
+    is => 'rw', 
+    isa => 'Str', 
+    lazy => 1, 
+    default => sub { 
+        my $self = shift;
+        join ('/', $self->xcap_root, $self->application, $self->tree, 
+            $self->user, $self->filename);
+    },
+);
 
 =head1 NAME
 
@@ -119,13 +83,40 @@ Todo:
 
 =head2 xcap_root
 
-xcap_root - 
+It's a context that contains all the documents across all application usages and users that are managed by the server.
+
+The root of the XCAP hierarchy is called the XCAP root. It defines the context in which all other resources exist. The XCAP root is represented with an HTTP URI, called the XCAP Root URI. This URI is a valid HTTP URI; however, it doesn't point to any resource that actually exists on the server. Its purpose is to identify the root of the tree within the domain where all XCAP documents are stored.
+
+=cut
+
+subtype 'IsURI' 
+    => as 'Str' 
+    => where { is_uri($_) } 
+    => message { "This xcap_root ($_) is not an uri!" };
+
+has 'xcap_root' => (
+    is => 'rw',
+    isa => 'IsURI' 
+);
 
 =head2 user 
 
-user -
+user - User that represents the parent for all documents for a particular user for a particular application usage within a particular XCAP root.
 
-=head2 auth_username
+=cut
+
+subtype 'IsUserID'
+    => as 'Str'
+    => where { $_ =~ /sip:*@*/ }
+    => message { 'User entry needs to be sip:foo@domain.org.' };
+
+has 'user' => (
+    is => 'rw',
+    isa => 'IsUserID'
+);
+
+
+=head2 auth_realm
 
 auth_realm -
 
@@ -138,10 +129,68 @@ auth_username -
 
 auth_password - 
 
+=cut
 
-=head2 ssl_verify_cert
+has ['auth_realm', 'auth_username', 'auth_password'] => ( 
+    is => 'rw', 
+    isa => 'Str'
+);
 
-ssl_verify_cert - 
+=head2 application
+
+Application can be resource-lists, rls-services, pres-rules, pdif-manipulations or xcap-caps. (Default: pres-rules)
+
+=cut
+
+has 'application' => (
+    is => 'rw', 
+    isa => enum([qw[resource-lists rls-services pres-rules pdif-manipulation watchers xcap-caps ]]), 
+    default => 'pres-rules'
+);
+
+=head2 tree
+
+Tree can be users or global. (Default: users)
+
+=cut
+
+has 'tree' => (
+    is => 'rw', 
+    isa => enum([qw[users global]]),
+    default => 'users'
+);
+
+=head2 filename
+
+Filename. (Default: index)
+
+=cut
+
+has 'filename' => (
+    is => 'rw', 
+    isa => 'Str', 
+    default => 'index'
+);
+
+=head1 METHODS
+
+=head2 fetch
+
+=head2 put
+
+=head2 delete
+
+=head2 replace
+
+=cut
+
+sub delete () { $_[0]->connection->delete; }
+
+sub fetch () { $_[0]->connection->fetch; }
+
+sub put () { $_[0]->connection->put; }
+
+sub replace () { $_[0]->connection->replace; }
 
 
 =head1 AUTHOR

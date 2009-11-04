@@ -56,9 +56,9 @@ sub fetch { $_[0]->_request('GET'); }
 
 sub delete { $_[0]->_request('DELETE'); }
 
-sub put { $_[0]->_request('PUT') }
+sub put { $_[0]->_request('PUT'); }
 
-sub replace { $self->delete; $self->put; }
+sub replace { $_[0]->delete; $_[0]->put; }
 
 1;
 
