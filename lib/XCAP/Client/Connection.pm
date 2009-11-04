@@ -52,7 +52,7 @@ sub _request () {
 
 
 
-sub get { $_[0]->_request('GET'); }   
+sub fetch { $_[0]->_request('GET'); }   
 
 sub delete { $_[0]->_request('DELETE'); }
 

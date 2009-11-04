@@ -17,11 +17,6 @@ has ['auth_realm', 'auth_username', 'auth_password'] => (
     isa => 'Str'
 );
 
-has 'ssl_verify_cert' => ( 
-    is => 'rw', 
-    isa => 'Bool'
-);
-
 has 'uri' => (
     is => 'rw', 
     isa => 'Str', 
@@ -70,7 +65,7 @@ has 'connection' => (
 
 sub delete () { $_[0]->connection->delete; }
 
-sub get () { $_[0]->connection->get; }
+sub fetch () { $_[0]->connection->fetch; }
 
 sub put () { $_[0]->connection->put; }
 
@@ -98,7 +93,7 @@ version 0.01
 
 	$xcap_client->put(%xcap_doc); 
 
-	$xcap_client->get("pres-rules");
+	$xcap_client->fetch("pres-rules");
 
 =head1 DESCRIPTION
 
@@ -108,9 +103,17 @@ XCAPClient library implements the XCAP protocol in client side, allowing the app
 
 The module implements the following features:
 
- * Get, create/replace and delete a document.
+ * Fetch, create/replace and delete a document.
  * Parameters allowing customized fields for each XCAP application.
  * Manage of multiple documents per XCAP application.
+ * SSL support.
+
+Todo:
+
+ * Fetch, create/replace and delete a document element (XML node)
+ * Fetch, create/replace and delete an element attribute. 
+ * Exception for each HTTP error response.
+ * Fetch the XCAP server auids, extensions and namespaces.
 
 =head1 ATTRIBUTES
 
