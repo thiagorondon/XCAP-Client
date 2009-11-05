@@ -130,7 +130,7 @@ user - User that represents the parent for all documents for a particular user f
 
 subtype 'IsUserID'
     => as 'Str'
-    => where { $_ =~ /sip:*@*/ }
+    => where { $_ =~ /^sip(s)?:.*@.*/ }
     => message { 'User entry needs to be sip:foo@domain.org.' };
 
 has 'user' => (
@@ -216,7 +216,7 @@ has 'document' => (
 =cut
 
 has 'element' => (
-    isa => 'ro',
+    is => 'ro',
     isa => 'Object',
     lazy => 1,
     default => sub { 
