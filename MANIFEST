@@ -2,7 +2,6 @@ lib/XCAP/Client/Connection.pm
 lib/XCAP/Client/Element.pm
 lib/XCAP/Client/Document.pm
 lib/XCAP/Client.pm
-lib/test.pl
 MANIFEST
 Makefile.PL
 inc/Module/AutoInstall.pm
@@ -23,13 +22,12 @@ t/00-load.t
 t/10-instance.t
 t/PRES_RULES_EXAMPLE.xml
 t/20-connect.t
-t/._PRES_RULES_EXAMPLE.xml
 Changes
 README
 docs/schemas/schema-pres-auth.xml
+docs/rfcs/rfc4825.html
 docs/rfcs/rfc4482.html
 docs/rfcs/rfc5025.html
 docs/rfcs/rfc4480.html
 docs/rfcs/rfc4479.html
 docs/rfcs/rfc4745.html
-docs/rfcs/rfc4825.txt
