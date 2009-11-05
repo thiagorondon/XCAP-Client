@@ -60,7 +60,7 @@ sub _request () {
     my $response = $self->useragent->request($request);
     $self->_http_response_code($method,$response->code);
 
-    $response->content;
+    return $method eq 'PUT' ? $response->content : $response->code;
 }
 
 

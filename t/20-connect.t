@@ -12,6 +12,7 @@ BEGIN {
 	use_ok ('XCAP::Client');
 }
 
+our $pres_rules_file = '';
 our $xcap_root = 'http://localhost/xcap-root';
 our $user = 'sip:username@example.org';
 our $auth_username = 'auth_username';
