@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 
+use Test::More;
 use Test::UseAllModules under => qw(lib/XCAP);
 
 BEGIN {

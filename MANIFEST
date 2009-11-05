@@ -1,6 +1,5 @@
 lib/XCAP/Client/Connection.pm
-lib/XCAP/Client/Packager.pm
-lib/XCAP/Client/.Connection.pm.swp
+lib/XCAP/Client/Element.pm
 lib/XCAP/Client/Document.pm
 lib/XCAP/Client.pm
 lib/test.pl
