@@ -43,12 +43,6 @@ has 'uri' => (
 
 XCAP::Client - XCAP client protocol (RFC 4825).
 
-=head1 VERSION
-
-Version $VERSION
-
-Development source in http://www.github.com/maluco/XCAP-Client/
-
 =head1 SYNOPSIS
 
     use XCAP::Client;
@@ -69,7 +63,7 @@ Development source in http://www.github.com/maluco/XCAP-Client/
     $xcap_client->document->delete;
 
     # Fetch pres-rules document.
-	$xcap_client->document->fetch();
+    $xcap_client->document->fetch();
 
     # If you want to create or replace.
     $xcap_client->document->content($xml_content);
