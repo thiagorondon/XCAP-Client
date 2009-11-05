@@ -12,11 +12,6 @@ has ['uri', 'auth_realm', 'auth_username','auth_password', 'content'] => (
     isa => 'Str'
 );
 
-has 'doc_content' => (
-    is => 'rw',
-    isa => 'Str'
-);
-
 has 'useragent' => ( 
     is => 'rw', 
     isa => 'Object',
@@ -51,27 +46,29 @@ sub _request () {
                    $self->auth_username, $self->auth_password);
 
     my $request = new HTTP::Request($method => $self->uri);
-   
+    
     if ($method eq 'PUT') {
-        $request->header('content-length' => length($self->doc_content));
-        $request->content($self->doc_content);
+        $request->header('content-length' => length($self->content));
+        $request->content($self->content);
     }
    
     my $response = $self->useragent->request($request);
-    $self->_http_response_code($method,$response->code);
+    
+    $self->_http_response_code($method,$response->code) 
+        if $method ne "DELETE";
 
-    return $method eq 'PUT' ? $response->content : $response->code;
+    return ($method eq 'GET' || $response->code == HTTP_CONFLICT)
+        ? $response->content : $response->code;
 }
 
 
 
-sub fetch { $_[0]->_request('GET'); }   
+sub get { $_[0]->_request('GET'); }   
 
 sub delete { $_[0]->_request('DELETE'); }
 
-sub create { $_[0]->_request('PUT'); }
+sub put { $_[0]->_request('PUT'); }
 
-sub replace { $_[0]->delete; $_[0]->fetch; }
 
 1;
 

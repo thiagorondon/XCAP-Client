@@ -14,18 +14,21 @@ has content => (
     isa => 'Str',
 );
 
-sub fetch { $_[0]->connection->fetch; }
+sub fetch { $_[0]->connection->get; }
 
 sub delete { $_[0]->connection->delete; }
 
 sub create { 
     my $self = shift;
-    $self->connection->fetch($self->content); 
+    $self->connection->content($self->content);
+    $self->connection->put; 
 }
 
 sub replace { 
     my $self = shift;
-    $self->connection->fetch($self->content); 
+    $self->connection->content($self->content);
+    $self->connection->delete;
+    $self->connection->put;
 }
 
 
