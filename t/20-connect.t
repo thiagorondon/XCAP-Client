@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use FindBin qw($Bin);
 
-use Test::More qw(no_plan);
+use Test::More tests => 20;
 use Test::Exception;
 
 use XCAP::Client;
