@@ -190,7 +190,7 @@ has 'filename' => (
 
 =head1 METHODS
 
-=head2 connection->[create,fetch,replace,delete]
+=head2 document->[create,fetch,replace,delete]
 
 You can create, fetch, replace or delete a document with this methods. To use create or delete you need to say the content of the "document->content".
 
