@@ -14,6 +14,7 @@ requires 'Data::Validate::URI';
 requires 'LWP::UserAgent';
 requires 'URI::Split';
 requires 'HTTP::Status';
+requires 'Test::UseAllModules';
 
 auto_install;
 
