@@ -11,7 +11,7 @@ use XCAP::Client::Connection;
 use XCAP::Client::Document;
 use XCAP::Client::Element;
 
-our $VERSION = "0.05";
+our $VERSION = "0.07";
 
 has 'connection' => (
     is => 'ro', 
